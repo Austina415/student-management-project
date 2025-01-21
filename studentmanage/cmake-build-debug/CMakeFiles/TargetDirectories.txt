@@ -1,0 +1,3 @@
+E:/code/studentmanage/cmake-build-debug/CMakeFiles/studentmanage.dir
+E:/code/studentmanage/cmake-build-debug/CMakeFiles/edit_cache.dir
+E:/code/studentmanage/cmake-build-debug/CMakeFiles/rebuild_cache.dir

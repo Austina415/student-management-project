@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>main.c</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.c</font>
+</center></td></tr></table>
+<pre><span class="s0">#include </span><span class="s2">&lt;stdio.h&gt;</span>
+<span class="s0">#include </span><span class="s2">&lt;stdlib.h&gt;</span>
+<span class="s0">#include </span><span class="s2">&quot;head.h&quot;</span>
+
+<span class="s3">int </span><span class="s1">main</span><span class="s4">(</span><span class="s3">void</span><span class="s4">)</span>
+<span class="s4">{</span>
+    <span class="s3">while</span><span class="s4">(</span><span class="s5">1</span><span class="s4">) {</span>
+        <span class="s3">switch</span><span class="s4">(</span><span class="s1">menu</span><span class="s4">()) {</span>
+            <span class="s6">//退出菜单</span>
+            <span class="s3">case  </span><span class="s5">0</span><span class="s1">:</span>
+                <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+            <span class="s6">//录入学生信息</span>
+            <span class="s3">case  </span><span class="s5">1</span><span class="s1">:</span>
+                <span class="s1">input</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s6">//打印学生信息</span>
+            <span class="s3">case  </span><span class="s5">2</span><span class="s1">:</span>
+                <span class="s1">output</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s6">//保存学生信息</span>
+            <span class="s3">case  </span><span class="s5">3</span><span class="s1">:</span>
+                <span class="s1">Save</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s3">case  </span><span class="s5">4</span><span class="s1">:</span>
+                <span class="s1">Rank</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s6">//统计学生个数</span>
+            <span class="s3">case  </span><span class="s5">5</span><span class="s1">:</span>
+                <span class="s1">sumup</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s6">//查找学生成绩</span>
+            <span class="s3">case  </span><span class="s5">6</span><span class="s1">:</span>
+                <span class="s1">search</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s6">//修改学生成绩</span>
+            <span class="s3">case  </span><span class="s5">7</span><span class="s1">:</span>
+                <span class="s1">amend</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s6">//删除</span>
+            <span class="s3">case  </span><span class="s5">8</span><span class="s1">:</span>
+                <span class="s1">Remove</span><span class="s4">();</span>
+                <span class="s3">break</span><span class="s4">;</span>
+            <span class="s3">default</span><span class="s1">:</span>
+                <span class="s1">printf</span><span class="s4">(</span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">对不起!您的输入有误,没有该功能!</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s4">}</span>
+        <span class="s6">//接收换行</span>
+        <span class="s1">getchar</span><span class="s4">();</span>
+        <span class="s6">// //程序暂停</span>
+        <span class="s6">// system(&quot;pause&quot;);</span>
+        <span class="s6">// //清屏</span>
+        <span class="s6">// system(&quot;cls&quot;);</span>
+    <span class="s4">}</span>
+
+    <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+<span class="s4">}</span>
+</pre>
+</body>
+</html>

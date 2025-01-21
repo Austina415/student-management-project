@@ -1,0 +1,424 @@
+<html>
+<head>
+<title>studenmanage.c</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #b3ae60;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+studenmanage.c</font>
+</center></td></tr></table>
+<pre>
+<span class="s1">#include </span><span class="s2">&lt;stdio.h&gt;</span>
+<span class="s1">#include </span><span class="s2">&lt;stdlib.h&gt;</span>
+<span class="s1">#include </span><span class="s2">&lt;string.h&gt;</span>
+<span class="s1">#include </span><span class="s2">&quot;head.h&quot;</span>
+
+
+<span class="s3">struct </span><span class="s0">Student </span><span class="s4">{</span>
+    <span class="s3">char </span><span class="s0">name</span><span class="s4">[</span><span class="s5">20</span><span class="s4">];</span>
+    <span class="s3">int </span><span class="s0">id</span><span class="s4">;</span>
+    <span class="s3">float </span><span class="s0">grade</span><span class="s4">[</span><span class="s5">4</span><span class="s4">];</span>
+<span class="s4">};</span>
+<span class="s6">//链表</span>
+<span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">{</span>
+    <span class="s3">struct </span><span class="s0">Student student</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">next</span><span class="s4">;</span>
+<span class="s4">};</span>
+<span class="s6">//头指针</span>
+<span class="s3">struct </span><span class="s0">StudentList head</span><span class="s4">;</span>
+<span class="s6">//菜单</span>
+<span class="s3">int </span><span class="s0">menu</span><span class="s4">() {</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***********************************</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***    学生成绩管理系统(C语言版)    ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***          请选择功能           ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***********************************</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***  1.录入学生信息 2.打印学生信息  ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***  3.保存学生信息 4.排序并且打印  ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***  5.统计学生人数 6.查询学生信息  ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***  7.修改学生信息 8.删除学生信息  ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***          0.退出系统          ***</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;***********************************</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;您的选择—&gt;&quot;</span><span class="s4">);</span>
+    <span class="s3">int </span><span class="s0">select</span><span class="s4">=-</span><span class="s5">1</span><span class="s4">;</span>
+    <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">select</span><span class="s4">);</span>
+    <span class="s3">return </span><span class="s0">select</span><span class="s4">;</span>
+<span class="s4">}</span>
+<span class="s6">//录入</span>
+<span class="s3">void </span><span class="s0">input</span><span class="s4">() {</span>
+    <span class="s3">int </span><span class="s0">n</span><span class="s4">;</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入您要录入的学生个数：&quot;</span><span class="s4">);</span>
+    <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">n</span><span class="s4">);</span>
+    <span class="s3">int </span><span class="s0">i</span><span class="s4">;</span>
+    <span class="s3">for</span><span class="s4">(</span><span class="s3">int </span><span class="s0">i</span><span class="s4">=</span><span class="s5">1</span><span class="s4">;</span><span class="s0">i</span><span class="s4">&lt;=</span><span class="s0">n</span><span class="s4">;</span><span class="s0">i</span><span class="s4">++) {</span>
+        <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">inputStudent</span><span class="s4">;</span><span class="s6">//新的学生</span>
+        <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span><span class="s6">//中间指针</span>
+        <span class="s0">inputStudent</span><span class="s4">=(</span><span class="s3">struct </span><span class="s0">StudentList</span><span class="s4">*)</span><span class="s0">malloc</span><span class="s4">(</span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList</span><span class="s4">));</span><span class="s6">//为新学生开辟空间</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入第%d位学生的信息：&quot;</span><span class="s4">,</span><span class="s0">i</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">姓名：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%s&quot;</span><span class="s4">,</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;学号：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+        <span class="s6">//判断是否重复</span>
+        <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+        <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+            <span class="s3">if</span><span class="s4">(</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">==</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">) {</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;学号重复，请重新输入：&quot;</span><span class="s4">);</span>
+                <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+                <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+            <span class="s4">}</span><span class="s3">else </span><span class="s4">{</span>
+                <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;语文成绩：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%f&quot;</span><span class="s4">,&amp;</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;数学成绩：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%f&quot;</span><span class="s4">,&amp;</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;英语成绩：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%f&quot;</span><span class="s4">,&amp;</span><span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+        <span class="s6">//链接链表</span>
+        <span class="s0">inputStudent</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+        <span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">=</span><span class="s0">inputStudent</span><span class="s4">;</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;录入成功！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s4">}</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+    <span class="s0">getchar</span><span class="s4">();</span>
+<span class="s4">}</span>
+<span class="s6">//打印</span>
+<span class="s3">void </span><span class="s0">output</span><span class="s4">() {</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;姓名*****学号******语文******数学******英语*****总分</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9s&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9d&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+        <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s4">}</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+    <span class="s0">getchar</span><span class="s4">();</span>
+<span class="s4">}</span>
+<span class="s6">//修改</span>
+<span class="s3">void </span><span class="s0">amend</span><span class="s4">() {</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入要更改的学生的学号：&quot;</span><span class="s4">);</span>
+    <span class="s3">int </span><span class="s0">id</span><span class="s4">;</span>
+    <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">id</span><span class="s4">);</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+        <span class="s3">if</span><span class="s4">(</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">==</span><span class="s0">id</span><span class="s4">) {</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入学生姓名：&quot;</span><span class="s4">);</span>
+            <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%s&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入学生学号：&quot;</span><span class="s4">);</span>
+            <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入学生成绩：</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;语文：&quot;</span><span class="s4">);</span>
+            <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;数学：&quot;</span><span class="s4">);</span>
+            <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;英语：&quot;</span><span class="s4">);</span>
+            <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;学生成绩修改成功！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+            <span class="s0">getchar</span><span class="s4">();</span>
+            <span class="s3">return</span><span class="s4">;</span>
+        <span class="s4">}</span><span class="s3">else </span><span class="s4">{</span>
+            <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;未查找到相应学号！！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+    <span class="s0">getchar</span><span class="s4">();</span>
+<span class="s4">}</span>
+<span class="s6">//查找</span>
+<span class="s3">void </span><span class="s0">search</span><span class="s4">() {</span>
+    <span class="s0">label1:</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请选择查询方式：学号查询（1）/姓名查询（2）-&gt;&quot;</span><span class="s4">);</span>
+    <span class="s3">int </span><span class="s0">n</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">n</span><span class="s4">);</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">n</span><span class="s4">==</span><span class="s5">1</span><span class="s4">) {</span>
+        <span class="s3">int </span><span class="s0">id</span><span class="s4">;</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入学号：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">id</span><span class="s4">);</span>
+        <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+            <span class="s3">if</span><span class="s4">(</span><span class="s0">id</span><span class="s4">==</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">) {</span>
+                <span class="s6">// printf(&quot;姓名：%s\n&quot;,p-&gt;student.name);</span>
+                <span class="s6">// printf(&quot;学号：%d\n&quot;,p-&gt;student.id);</span>
+                <span class="s6">// printf(&quot;语文成绩：%.1f\n&quot;,p-&gt;student.grade[0]);</span>
+                <span class="s6">// printf(&quot;数学成绩：%.1f\n&quot;,p-&gt;student.grade[1]);</span>
+                <span class="s6">// printf(&quot;英语成绩：%.1f\n&quot;,p-&gt;student.grade[2]);</span>
+                <span class="s6">// printf(&quot;总成绩：%.1f\n&quot;,p-&gt;student.grade[0]+p-&gt;student.grade[1]+p-&gt;student.grade[2]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;姓名*****学号******语文******数学******英语*****总分&quot;</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9s&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9d&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+                <span class="s0">getchar</span><span class="s4">();</span>
+                <span class="s3">return</span><span class="s4">;</span>
+            <span class="s4">}</span><span class="s3">else</span><span class="s4">{</span>
+                <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span><span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;未查询到相应学号！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+        <span class="s0">getchar</span><span class="s4">();</span>
+    <span class="s4">}</span><span class="s3">else if</span><span class="s4">(</span><span class="s0">n</span><span class="s4">==</span><span class="s5">2</span><span class="s4">) {</span>
+        <span class="s3">char </span><span class="s0">name</span><span class="s4">[</span><span class="s5">30</span><span class="s4">];</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入姓名：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%s&quot;</span><span class="s4">,</span><span class="s0">name</span><span class="s4">);</span>
+        <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+            <span class="s3">if</span><span class="s4">(</span><span class="s0">strcmp</span><span class="s4">(</span><span class="s0">name</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">)==</span><span class="s5">0</span><span class="s4">) {</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;姓名：%s</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;学号：%d</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;语文成绩：%.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;数学成绩：%.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;英语成绩：%.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+                <span class="s0">getchar</span><span class="s4">();</span>
+                <span class="s3">return</span><span class="s4">;</span>
+            <span class="s4">}</span><span class="s3">else </span><span class="s4">{</span>
+                <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span><span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;未查询到相应姓名！！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+        <span class="s0">getchar</span><span class="s4">();</span>
+    <span class="s4">}</span><span class="s3">else </span><span class="s4">{</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;输入有误！！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s3">goto </span><span class="s0">label1</span><span class="s4">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+<span class="s6">//统计</span>
+<span class="s3">void </span><span class="s0">sumup</span><span class="s4">() {</span>
+    <span class="s3">int </span><span class="s0">sum</span><span class="s4">=</span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+        <span class="s0">sum</span><span class="s4">++;</span>
+        <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s4">}</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;共%d名学生</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">sum</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+    <span class="s0">getchar</span><span class="s4">();</span>
+<span class="s4">}</span>
+<span class="s6">//删除</span>
+<span class="s3">void </span><span class="s0">Remove</span><span class="s4">() {</span>
+    <span class="s0">label1:</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请选择删除方式：学号删除（1）/姓名删除（2）-&gt;&quot;</span><span class="s4">);</span>
+    <span class="s3">int </span><span class="s0">n</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">n</span><span class="s4">);</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">n</span><span class="s4">==</span><span class="s5">1</span><span class="s4">) {</span>
+        <span class="s3">int </span><span class="s0">id</span><span class="s4">;</span>
+        <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1</span><span class="s4">=&amp;</span><span class="s0">head</span><span class="s4">;</span><span class="s6">//滞后</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入学号：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">id</span><span class="s4">);</span>
+        <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+            <span class="s3">if</span><span class="s4">(</span><span class="s0">id</span><span class="s4">==</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">) {</span>
+                <span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;学生数据删除成功！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+                <span class="s0">getchar</span><span class="s4">();</span>
+                <span class="s3">return</span><span class="s4">;</span>
+            <span class="s4">}</span><span class="s3">else</span><span class="s4">{</span>
+                    <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+                    <span class="s0">p1</span><span class="s4">=</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span><span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;未查询到相应学号！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+        <span class="s0">getchar</span><span class="s4">();</span>
+    <span class="s4">}</span><span class="s3">else if</span><span class="s4">(</span><span class="s0">n</span><span class="s4">==</span><span class="s5">2</span><span class="s4">) {</span>
+        <span class="s3">char </span><span class="s0">name</span><span class="s4">[</span><span class="s5">30</span><span class="s4">];</span>
+        <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1</span><span class="s4">=&amp;</span><span class="s0">head</span><span class="s4">;</span><span class="s6">//滞后</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请输入姓名：&quot;</span><span class="s4">);</span>
+        <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%s&quot;</span><span class="s4">,</span><span class="s0">name</span><span class="s4">);</span>
+        <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+            <span class="s3">if</span><span class="s4">(</span><span class="s0">strcmp</span><span class="s4">(</span><span class="s0">name</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">)==</span><span class="s5">0</span><span class="s4">) {</span>
+                <span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;学生数据删除成功！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+                <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+                <span class="s0">getchar</span><span class="s4">();</span>
+                <span class="s3">return</span><span class="s4">;</span>
+            <span class="s4">}</span><span class="s3">else </span><span class="s4">{</span>
+                <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+                <span class="s0">p1</span><span class="s4">=</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span><span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;未查询到相应姓名！！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+        <span class="s0">getchar</span><span class="s4">();</span>
+    <span class="s4">}</span><span class="s3">else </span><span class="s4">{</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;输入有误！！！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s3">goto </span><span class="s0">label1</span><span class="s4">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+
+<span class="s3">int </span><span class="s0">cmp_id</span><span class="s4">(</span><span class="s3">const void </span><span class="s4">*</span><span class="s0">a</span><span class="s4">, </span><span class="s3">const void </span><span class="s4">*</span><span class="s0">b</span><span class="s4">)</span>
+<span class="s4">{</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">a</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p2 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">b</span><span class="s4">;</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id </span><span class="s4">&lt; </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">)</span>
+        <span class="s3">return </span><span class="s4">-</span><span class="s5">1</span><span class="s4">;</span>
+    <span class="s3">else if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id </span><span class="s4">== </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">)</span>
+        <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">else</span>
+        <span class="s3">return </span><span class="s5">1</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">int </span><span class="s0">cmp_score</span><span class="s4">(</span><span class="s3">const void </span><span class="s4">*</span><span class="s0">a</span><span class="s4">, </span><span class="s3">const void </span><span class="s4">*</span><span class="s0">b</span><span class="s4">)</span>
+<span class="s4">{</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">a</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p2 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">b</span><span class="s4">;</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">] &lt; </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s4">-</span><span class="s5">1</span><span class="s4">;</span>
+    <span class="s3">else if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">] == </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">else</span>
+        <span class="s3">return </span><span class="s5">1</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">int </span><span class="s0">cmp_ch</span><span class="s4">(</span><span class="s3">const void </span><span class="s4">*</span><span class="s0">a</span><span class="s4">, </span><span class="s3">const void </span><span class="s4">*</span><span class="s0">b</span><span class="s4">)</span>
+<span class="s4">{</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">a</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p2 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">b</span><span class="s4">;</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]&lt; </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s4">-</span><span class="s5">1</span><span class="s4">;</span>
+    <span class="s3">else if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]== </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">else</span>
+        <span class="s3">return </span><span class="s5">1</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">int </span><span class="s0">cmp_math</span><span class="s4">(</span><span class="s3">const void </span><span class="s4">*</span><span class="s0">a</span><span class="s4">, </span><span class="s3">const void </span><span class="s4">*</span><span class="s0">b</span><span class="s4">)</span>
+<span class="s4">{</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">a</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p2 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">b</span><span class="s4">;</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]&lt; </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s4">-</span><span class="s5">1</span><span class="s4">;</span>
+    <span class="s3">else if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]== </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">else</span>
+        <span class="s3">return </span><span class="s5">1</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">int </span><span class="s0">cmp_en</span><span class="s4">(</span><span class="s3">const void </span><span class="s4">*</span><span class="s0">a</span><span class="s4">, </span><span class="s3">const void </span><span class="s4">*</span><span class="s0">b</span><span class="s4">)</span>
+<span class="s4">{</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p1 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">a</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p2 </span><span class="s4">= *(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">b</span><span class="s4">;</span>
+    <span class="s3">if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]&lt; </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s4">-</span><span class="s5">1</span><span class="s4">;</span>
+    <span class="s3">else if</span><span class="s4">(</span><span class="s0">p1</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]== </span><span class="s0">p2</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">])</span>
+        <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">else</span>
+        <span class="s3">return </span><span class="s5">1</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s6">//排序</span>
+<span class="s3">void </span><span class="s0">Rank</span><span class="s4">() {</span>
+    <span class="s3">int </span><span class="s0">num</span><span class="s4">=</span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">k</span><span class="s4">;</span>
+    <span class="s0">k</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s3">while</span><span class="s4">(</span><span class="s0">k</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+        <span class="s0">num</span><span class="s4">++;</span>
+        <span class="s0">k</span><span class="s4">=</span><span class="s0">k</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;请选择排序方式&quot;</span>
+           <span class="s2">&quot;1.学号排序 2.总分排序&quot;</span>
+           <span class="s2">&quot; 3.语文成绩排序&quot;</span>
+           <span class="s2">&quot; 4.数学成绩排序&quot;</span>
+           <span class="s2">&quot; 5.英语成绩排序</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;您的选择-&gt;&quot;</span><span class="s4">);</span>
+    <span class="s3">int </span><span class="s0">c</span><span class="s4">;</span>
+    <span class="s0">scanf</span><span class="s4">(</span><span class="s2">&quot;%d&quot;</span><span class="s4">,&amp;</span><span class="s0">c</span><span class="s4">);</span>
+    <span class="s0">getchar</span><span class="s4">();</span>
+
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**</span><span class="s0">list</span><span class="s4">=(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">**)</span><span class="s0">malloc</span><span class="s4">(</span><span class="s0">num </span><span class="s4">* </span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList</span><span class="s4">*));</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+
+    <span class="s3">for</span><span class="s4">(</span><span class="s3">int </span><span class="s0">i</span><span class="s4">=</span><span class="s5">0</span><span class="s4">;</span><span class="s0">i</span><span class="s4">&lt;</span><span class="s0">num</span><span class="s4">;</span><span class="s0">i</span><span class="s4">++) {</span>
+        <span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]=</span><span class="s0">p</span><span class="s4">;</span>
+        <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">switch</span><span class="s4">(</span><span class="s0">c</span><span class="s4">) {</span>
+        <span class="s3">case </span><span class="s5">1</span><span class="s0">: </span><span class="s4">{</span>
+            <span class="s0">qsort</span><span class="s4">(</span><span class="s0">list</span><span class="s4">, </span><span class="s0">num</span><span class="s4">, </span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*), </span><span class="s0">cmp_id</span><span class="s4">);</span>
+            <span class="s3">break</span><span class="s4">;</span>
+        <span class="s4">}</span>
+        <span class="s3">case </span><span class="s5">2</span><span class="s0">:</span>
+            <span class="s0">qsort</span><span class="s4">(</span><span class="s0">list</span><span class="s4">, </span><span class="s0">num</span><span class="s4">, </span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*), </span><span class="s0">cmp_score</span><span class="s4">);</span>
+            <span class="s3">break</span><span class="s4">;</span>
+        <span class="s3">case </span><span class="s5">3</span><span class="s0">:</span>
+            <span class="s0">qsort</span><span class="s4">(</span><span class="s0">list</span><span class="s4">, </span><span class="s0">num</span><span class="s4">, </span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*), </span><span class="s0">cmp_ch</span><span class="s4">);</span>
+            <span class="s3">break</span><span class="s4">;</span>
+        <span class="s3">case </span><span class="s5">4</span><span class="s0">:</span>
+            <span class="s0">qsort</span><span class="s4">(</span><span class="s0">list</span><span class="s4">, </span><span class="s0">num</span><span class="s4">, </span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*), </span><span class="s0">cmp_math</span><span class="s4">);</span>
+            <span class="s3">break</span><span class="s4">;</span>
+        <span class="s3">case </span><span class="s5">5</span><span class="s0">:</span>
+            <span class="s0">qsort</span><span class="s4">(</span><span class="s0">list</span><span class="s4">, </span><span class="s0">num</span><span class="s4">, </span><span class="s3">sizeof</span><span class="s4">(</span><span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*), </span><span class="s0">cmp_en</span><span class="s4">);</span>
+            <span class="s3">break</span><span class="s4">;</span>
+        <span class="s3">default</span><span class="s0">:</span>
+            <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;输入有误！！！&quot;</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+        <span class="s0">getchar</span><span class="s4">();</span>
+    <span class="s4">}</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;排序成功！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;姓名*****学号******语文******数学******英语*****总分</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+    <span class="s3">for</span><span class="s4">(</span><span class="s3">int </span><span class="s0">i</span><span class="s4">=</span><span class="s5">0</span><span class="s4">;</span><span class="s0">i</span><span class="s4">&lt;</span><span class="s0">num</span><span class="s4">;</span><span class="s0">i</span><span class="s4">++){</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9s&quot;</span><span class="s4">,</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9d&quot;</span><span class="s4">,</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;%-9.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">list</span><span class="s4">[</span><span class="s0">i</span><span class="s4">]-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+<span class="s4">}</span>
+    <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+    <span class="s4">}</span>
+<span class="s6">//保存</span>
+<span class="s3">void </span><span class="s0">Save</span><span class="s4">() {</span>
+    <span class="s3">struct </span><span class="s0">StudentList </span><span class="s4">*</span><span class="s0">p</span><span class="s4">;</span>
+    <span class="s0">p</span><span class="s4">=</span><span class="s0">head</span><span class="s4">.</span><span class="s0">next</span><span class="s4">;</span>
+    <span class="s0">FILE</span><span class="s4">* </span><span class="s0">fp</span><span class="s4">;</span>
+    <span class="s0">fp </span><span class="s4">= </span><span class="s0">fopen</span><span class="s4">(</span><span class="s2">&quot;E:</span><span class="s3">\\</span><span class="s2">code</span><span class="s3">\\</span><span class="s2">save.txt&quot;</span><span class="s4">, </span><span class="s2">&quot;w&quot;</span><span class="s4">);</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s0">fp </span><span class="s4">!= </span><span class="s0">NULL</span><span class="s4">)</span>
+    <span class="s4">{</span>
+        <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;姓名*****学号******语文******数学******英语*****总分</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s3">while</span><span class="s4">(</span><span class="s0">p</span><span class="s4">!=</span><span class="s0">NULL</span><span class="s4">) {</span>
+
+            <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;%-9s&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">name</span><span class="s4">);</span>
+            <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;%-9d&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">id</span><span class="s4">);</span>
+            <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]);</span>
+            <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]);</span>
+            <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;%-9.1f&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+            <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;%-9.1f</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">,</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">0</span><span class="s4">]+</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">1</span><span class="s4">]+</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">student</span><span class="s4">.</span><span class="s0">grade</span><span class="s4">[</span><span class="s5">2</span><span class="s4">]);</span>
+            <span class="s0">p</span><span class="s4">=</span><span class="s0">p</span><span class="s4">-&gt;</span><span class="s0">next</span><span class="s4">;</span>
+        <span class="s4">}</span>
+        <span class="s0">fprintf</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">,</span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s0">fclose</span><span class="s4">(</span><span class="s0">fp</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;保存成功！</span><span class="s3">\n</span><span class="s2">&quot;</span><span class="s4">);</span>
+        <span class="s0">printf</span><span class="s4">(</span><span class="s2">&quot;按回车键继续...&quot;</span><span class="s4">);</span>
+        <span class="s0">getchar</span><span class="s4">();</span>
+        <span class="s3">return </span><span class="s4">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span></pre>
+</body>
+</html>
